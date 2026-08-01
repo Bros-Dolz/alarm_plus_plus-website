@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<script>if ('requestAnimationFrame' in window) document.documentElement.classList.add('js');</script>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Alarm++ — the alarm clock built around what wakes you</title>
+<meta name="description" content="An alarm clock for Android and iOS. Wake up to one of five tones, to a video from your own library, or to a shuffle playlist that plays something different every morning. World clock, timer and stopwatch included.">
+
+<meta name="theme-color" content="#121013" media="(prefers-color-scheme: dark)">
+<meta name="theme-color" content="#FFF8F6" media="(prefers-color-scheme: light)">
+
+<!-- Replace this origin if the site moves to a custom domain. -->
+<link rel="canonical" href="https://bros-dolz.github.io/alarm_plus_plus-website/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Alarm++">
+<meta property="og:title" content="Alarm++ — the alarm clock built around what wakes you">
+<meta property="og:description" content="Wake up to one of five tones, to a video from your own library, or to a shuffle playlist that plays something different every morning.">
+<meta property="og:url" content="https://bros-dolz.github.io/alarm_plus_plus-website/">
+<meta property="og:image" content="https://bros-dolz.github.io/alarm_plus_plus-website/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="The Alarm++ app icon: a clock ring with hands at ten past ten and two plus signs.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Alarm++ — the alarm clock built around what wakes you">
+<meta name="twitter:description" content="Wake up to one of five tones, to a video from your own library, or to a shuffle playlist that plays something different every morning.">
+<meta name="twitter:image" content="https://bros-dolz.github.io/alarm_plus_plus-website/assets/og-image.png">
+
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="assets/icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="assets/apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<a class="skip-link" href="#main">Skip to content</a>
+
+<!-- The app mark, recreated from assets/app_icon.png: a clock ring with hands
+     at 10:10 and two plus signs, the ring notched back around them. -->
+<svg class="sprite" aria-hidden="true" focusable="false" xmlns="http://www.w3.org/2000/svg">
+  <symbol id="logo" viewBox="88 88 876 754">
+    <mask id="logo-notch" maskUnits="userSpaceOnUse" x="88" y="88" width="876" height="754">
+      <rect x="88" y="88" width="876" height="754" fill="#fff"/>
+      <path d="M561 742h142M632 671v142M793 742h142M864 671v142" stroke="#000" stroke-width="126" stroke-linecap="round" fill="none"/>
+    </mask>
+    <g fill="none" stroke="currentColor" stroke-linecap="round">
+      <circle cx="430" cy="430" r="300" stroke-width="84" mask="url(#logo-notch)"/>
+      <path d="M430 430 300.1 355" stroke-width="66"/>
+      <path d="M430 430 611.87 325" stroke-width="58"/>
+    </g>
+    <circle cx="430" cy="430" r="42" fill="currentColor"/>
+    <path d="M561 742h142M632 671v142M793 742h142M864 671v142" stroke="currentColor" stroke-width="58" stroke-linecap="round" fill="none"/>
+  </symbol>
+</svg>
+
+<header class="nav">
+  <div class="wrap nav__inner">
+    <a class="brand" href="index.html" aria-label="Alarm++ home">
+      <svg class="brand__mark" aria-hidden="true" focusable="false"><use href="#logo"/></svg>
+      <span class="brand__wordmark">Alarm++</span>
+    </a>
+    <nav aria-label="Primary">
+      <ul class="nav__links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="privacy.html">Privacy</a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ===================== Hero ===================== -->
+  <section class="hero">
+    <div class="wrap hero__inner">
+      <div>
+      <img class="hero__icon" src="assets/icon.svg" width="104" height="104" alt="" aria-hidden="true">
+      <h1>Alarm++</h1>
+      <p class="hero__line">An alarm clock built around <b>what wakes you</b> — one of five tones, a video from your own library, or a shuffle that plays something different every morning.</p>
+
+      <div class="stores">
+        <!-- Placeholders. Buttons rather than links on purpose: there is nowhere
+             to point yet, and an href="#" would jump the page to the top and reset
+             the tab position. Swap each for an <a href="…"> carrying the official
+             App Store / Google Play badge once there are listings. -->
+        <button type="button" class="store" aria-disabled="true" aria-describedby="stores-note">
+          <svg class="store__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a1 1 0 0 1 1 1v9.59l3.3-3.3a1 1 0 1 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V4a1 1 0 0 1 1-1Zm-7 14a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z"/></svg>
+          <span class="store__text">
+            <span class="store__kicker">Download on the</span>
+            <span class="store__name">App Store</span>
+          </span>
+          <span class="store__soon">Soon</span>
+        </button>
+        <button type="button" class="store" aria-disabled="true" aria-describedby="stores-note">
+          <svg class="store__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a1 1 0 0 1 1 1v9.59l3.3-3.3a1 1 0 1 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V4a1 1 0 0 1 1-1Zm-7 14a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z"/></svg>
+          <span class="store__text">
+            <span class="store__kicker">Get it on</span>
+            <span class="store__name">Google Play</span>
+          </span>
+          <span class="store__soon">Soon</span>
+        </button>
+      </div>
+      <p class="stores__note" id="stores-note">Not on the stores yet. These buttons go live with the listings.</p>
+      </div>
+      <svg class="hero__watermark" viewBox="88 88 876 754" aria-hidden="true" focusable="false"><use href="#logo"/></svg>
+    </div>
+  </section>
+
+  <!-- ===================== The insight ===================== -->
+  <section class="section section--tight insight" aria-labelledby="insight-h">
+    <div class="wrap">
+      <div class="insight__panel reveal">
+        <blockquote>
+          <h2 id="insight-h">The same alarm stops working.</h2>
+          <p>Give your brain one sound every morning and it learns to sleep through it. Shuffle never gives it the chance — a different tone, song or video wakes you each day, from a list you arranged yourself.</p>
+        </blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Features ===================== -->
+  <section class="section" id="features" aria-labelledby="features-h">
+    <div class="wrap">
+      <div class="section__head">
+        <span class="eyebrow">What it does</span>
+        <h2 id="features-h">A clock app, and then the part that matters</h2>
+        <p class="lede">Alarms, world clock, timer and stopwatch. What sets it apart is what happens at the moment it rings.</p>
+      </div>
+
+      <div class="features">
+
+        <!-- 1 ------------------------------------------------------------ -->
+        <article class="feature reveal">
+          <div class="feature__text">
+            <span class="feature__num">01</span>
+            <h3>Wake up to a video</h3>
+            <p class="feature__body">Pick a clip from your own library. It plays full-screen behind the time and the buttons, and the screen turns to match the clip — portrait for a phone-shot video, landscape for 16:9. The clip's own soundtrack is the alarm.</p>
+            <p class="feature__body">Every video alarm still carries a tone underneath. If the file is gone, the decoder refuses it, or it freezes mid-alarm, the tone rings anyway. Waking to a video only counts if it always wakes you.</p>
+            <p class="feature__body">Picking a video to wake up to means picking the whole video.</p>
+          </div>
+          <div class="feature__visual">
+            <div class="device" aria-hidden="true">
+              <div class="screen screen--ring">
+                <div class="status"><span>06:45</span><span class="status__dots"><i></i><i></i><i></i></span></div>
+                <div class="ring__spacer"></div>
+                <span class="ring__chip">Video &middot; tone armed underneath</span>
+                <p class="ring__label">Alarm</p>
+                <p class="ring__time">06:45</p>
+                <div class="ring__actions">
+                  <span class="mbtn mbtn--ghost">Snooze 9 min</span>
+                  <span class="mbtn mbtn--filled">Stop</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 2 ------------------------------------------------------------ -->
+        <article class="feature reveal">
+          <div class="feature__text">
+            <span class="feature__num">02</span>
+            <h3>Shuffle playlists <span class="badge-premium">Premium</span></h3>
+            <p class="feature__body">One list holding the built-in tones, songs of your own and video clips, in whatever order you arranged them — or drawn at random. One entry wakes you each morning and the next is up tomorrow.</p>
+            <p class="feature__body">One morning is one entry. The move to the next one happens when you dismiss, so tomorrow gets the next entry whether or not the app stayed running.</p>
+          </div>
+          <div class="feature__visual">
+            <div class="device" aria-hidden="true">
+              <div class="screen">
+                <div class="status"><span>22:34</span><span class="status__dots"><i></i><i></i><i></i></span></div>
+                <p class="screen__title">Shuffle <span class="chip chip--grad">Premium</span></p>
+                <div class="mcard">
+                  <div class="mrow">
+                    <span class="grip"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                    <span class="micon"><svg viewBox="0 0 24 24"><path d="M12 3a1 1 0 0 1 1 1v9.2a3.5 3.5 0 1 1-2-3.16V4a1 1 0 0 1 1-1Z"/></svg></span>
+                    <span class="mrow__grow"><span class="mrow__label">Radar</span><span class="mrow__meta">Tone</span></span>
+                    <span class="chip">Tomorrow</span>
+                  </div>
+                </div>
+                <div class="mcard">
+                  <div class="mrow">
+                    <span class="grip"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                    <span class="micon"><svg viewBox="0 0 24 24"><path d="M4 6h11a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2Zm15 3.5 3-2v9l-3-2v-5Z"/></svg></span>
+                    <span class="mrow__grow"><span class="mrow__label">Beach, July</span><span class="mrow__meta">Video &middot; 0:42</span></span>
+                  </div>
+                </div>
+                <div class="mcard">
+                  <div class="mrow">
+                    <span class="grip"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                    <span class="micon"><svg viewBox="0 0 24 24"><path d="M20 3v12.2a3.5 3.5 0 1 1-2-3.16V7.6l-8 1.7v8.9a3.5 3.5 0 1 1-2-3.16V6.4l12-2.6Z"/></svg></span>
+                    <span class="mrow__grow"><span class="mrow__label">Morning song</span><span class="mrow__meta">Your library</span></span>
+                  </div>
+                </div>
+                <div class="mcard">
+                  <div class="mrow">
+                    <span class="grip"><i></i><i></i><i></i><i></i><i></i><i></i></span>
+                    <span class="micon"><svg viewBox="0 0 24 24"><path d="M12 3a1 1 0 0 1 1 1v9.2a3.5 3.5 0 1 1-2-3.16V4a1 1 0 0 1 1-1Z"/></svg></span>
+                    <span class="mrow__grow"><span class="mrow__label">Chimes</span><span class="mrow__meta">Tone</span></span>
+                  </div>
+                </div>
+                <div class="mcard mcard--foot">
+                  <div class="mrow">
+                    <span class="mrow__grow"><span class="mrow__meta">Order &middot; as arranged</span></span>
+                    <span class="chip chip--quiet">Shuffle off</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 3 ------------------------------------------------------------ -->
+        <article class="feature reveal">
+          <div class="feature__text">
+            <span class="feature__num">03</span>
+            <h3>Five tones you choose by ear</h3>
+            <p class="feature__body">Radar, Chimes, Beacon, Ripple, Classic. Tapping a row in the picker plays it — at the volume it will actually ring at — so you choose by ear rather than by name.</p>
+            <p class="feature__body">They're synthesised waveforms, generated as code: reproducible and licence-free.</p>
+          </div>
+          <div class="feature__visual">
+            <div class="device" aria-hidden="true">
+              <div class="screen">
+                <div class="status"><span>22:35</span><span class="status__dots"><i></i><i></i><i></i></span></div>
+                <p class="screen__title">Edit alarm</p>
+                <div class="mcard">
+                  <div class="mrow">
+                    <span class="mrow__grow"><span class="mrow__label">06:45</span><span class="mrow__meta">Weekdays &middot; Work</span></span>
+                    <span class="toggle toggle--on"></span>
+                  </div>
+                </div>
+                <div class="sheet">
+                  <span class="sheet__grab"></span>
+                  <p class="sheet__title">Alarm sound</p>
+                  <div class="tone tone--on">
+                    <span class="wave"><i></i><i></i><i></i><i></i><i></i></span>
+                    <span class="tone__name">Radar</span>
+                    <svg class="tone__check" viewBox="0 0 24 24"><path d="M9.6 16.2 5.4 12l-1.4 1.4 5.6 5.6L20.4 8.2 19 6.8 9.6 16.2Z"/></svg>
+                  </div>
+                  <div class="tone"><span class="tone__name">Chimes</span></div>
+                  <div class="tone"><span class="tone__name">Beacon</span></div>
+                  <div class="tone"><span class="tone__name">Ripple</span></div>
+                  <div class="tone"><span class="tone__name">Classic</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 4 ------------------------------------------------------------ -->
+        <article class="feature reveal">
+          <div class="feature__text">
+            <span class="feature__num">04</span>
+            <h3>Alarms that fit the day</h3>
+            <p class="feature__body">Time, label, repeat days with Once / Every day / Weekdays / Weekends shortcuts, vibrate, and a snooze of any length — six presets plus a custom value from 1 to 120 minutes. Swipe a row to delete, with undo.</p>
+            <p class="feature__body">The list carries a live next-alarm header: when it rings, whether that's today, tomorrow or a named weekday, and a counting-down "rings in&hellip;".</p>
+          </div>
+          <div class="feature__visual">
+            <div class="device" aria-hidden="true">
+              <div class="screen">
+                <div class="status"><span>22:33</span><span class="status__dots"><i></i><i></i><i></i></span></div>
+                <p class="screen__title">Alarms</p>
+                <div class="mcard">
+                  <p class="mrow__meta">Next alarm</p>
+                  <div class="mrow">
+                    <span class="mrow__grow"><span class="mtime">06:45</span><span class="mrow__meta">Tomorrow &middot; rings in 8h 12m</span></span>
+                  </div>
+                </div>
+                <div class="mcard">
+                  <div class="mrow">
+                    <span class="mrow__grow"><span class="mtime">06:45</span><span class="mrow__meta">Mon&ndash;Fri &middot; Work</span></span>
+                    <span class="toggle toggle--on"></span>
+                  </div>
+                </div>
+                <div class="mcard">
+                  <div class="mrow">
+                    <span class="mrow__grow"><span class="mtime">07:30</span><span class="mrow__meta">Sat, Sun &middot; Gym</span></span>
+                    <span class="toggle toggle--on"></span>
+                  </div>
+                </div>
+                <div class="mcard">
+                  <div class="mrow">
+                    <span class="mrow__grow"><span class="mtime mtime--off">09:00</span><span class="mrow__meta">Once &middot; Dentist</span></span>
+                    <span class="toggle"></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 5 ------------------------------------------------------------ -->
+        <article class="feature reveal">
+          <div class="feature__text">
+            <span class="feature__num">05</span>
+            <h3>World clock, and alarms anchored to a city</h3>
+            <p class="feature__body">Pin any of roughly 440 cities from the bundled IANA database, each with its own clock, whether it's a calendar day ahead or behind, and how far off local time it is.</p>
+            <p class="feature__body">Set an alarm for <span class="tnum">07:00</span> in Rome and it rings when Rome reaches <span class="tnum">07:00</span>, whatever that comes to where you are. Daylight saving is handled properly, not with a frozen offset.</p>
+          </div>
+          <div class="feature__visual">
+            <div class="device" aria-hidden="true">
+              <div class="screen">
+                <div class="status"><span>06:45</span><span class="status__dots"><i></i><i></i><i></i></span></div>
+                <p class="screen__title">World clock</p>
+                <div class="mcard">
+                  <div class="mrow">
+                    <span class="mrow__grow"><span class="mrow__label">Rome</span><span class="mrow__meta">Today &middot; +1h</span></span>
+                    <span class="mtime">07:45</span>
+                  </div>
+                </div>
+                <div class="mcard">
+                  <div class="mrow">
+                    <span class="mrow__grow"><span class="mrow__label">Tokyo</span><span class="mrow__meta">Today &middot; +8h</span></span>
+                    <span class="mtime">14:45</span>
+                  </div>
+                </div>
+                <div class="mcard">
+                  <div class="mrow">
+                    <span class="mrow__grow"><span class="mrow__label">Los Angeles</span><span class="mrow__meta">Yesterday &middot; &minus;8h</span></span>
+                    <span class="mtime">22:45</span>
+                  </div>
+                </div>
+                <div class="mcard mcard--foot">
+                  <div class="mrow">
+                    <span class="mrow__grow"><span class="mrow__label">Alarm &middot; 07:00</span><span class="mrow__meta">Europe/Rome</span></span>
+                    <span class="chip">Anchored</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <!-- 6 ------------------------------------------------------------ -->
+        <article class="feature reveal">
+          <div class="feature__text">
+            <span class="feature__num">06</span>
+            <h3>Timer and stopwatch</h3>
+            <p class="feature__body">Hour, minute and second wheels, presets from 1 to 30 minutes, a depleting progress ring, pause and resume, <span class="tnum">+1:00</span>, and a full-screen alert with Stop and Restart. A running timer survives leaving the tab and closing the app.</p>
+            <p class="feature__body">The stopwatch records laps with split and cumulative times, colouring the fastest and the slowest.</p>
+          </div>
+          <div class="feature__visual">
+            <div class="device" aria-hidden="true">
+              <div class="screen">
+                <div class="status"><span>22:36</span><span class="status__dots"><i></i><i></i><i></i></span></div>
+                <p class="screen__title">Timer</p>
+                <div class="dial">
+                  <div class="dial__wrap">
+                    <svg viewBox="0 0 120 120" focusable="false">
+                      <circle class="dial__track" cx="60" cy="60" r="50"/>
+                      <circle class="dial__fill" cx="60" cy="60" r="50"/>
+                    </svg>
+                    <span class="dial__read">04:32</span>
+                  </div>
+                </div>
+                <div class="mactions">
+                  <span class="mbtn mbtn--soft">Pause</span>
+                  <span class="mbtn mbtn--primary">+1:00</span>
+                </div>
+                <div class="tabs">
+                  <span class="tab">Clock</span>
+                  <span class="tab">Alarms</span>
+                  <span class="tab tab--on">Timer</span>
+                  <span class="tab">Stopwatch</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Built with care ===================== -->
+  <section class="section section--tight care" aria-labelledby="care-h">
+    <div class="wrap">
+      <div class="section__head">
+        <span class="eyebrow">Built with care</span>
+        <h2 id="care-h">The parts you only notice when they're missing</h2>
+      </div>
+      <div class="care__grid">
+        <div class="care__item reveal">
+          <h3>Every screen has a landscape layout</h3>
+          <p>Not a scaled-down copy — alarms go two to a row, and the ringing alarm puts the clock left and the buttons right.</p>
+        </div>
+        <div class="care__item reveal">
+          <h3>Light, dark, or follow the device</h3>
+          <p>Digital or analog clock face, chosen separately for the Clock tab and for a ringing alarm.</p>
+        </div>
+        <div class="care__item reveal">
+          <h3>Choosing a video needs no permissions</h3>
+          <p>It goes through the system photo picker, so you hand over one file rather than granting access to your library.</p>
+        </div>
+        <div class="care__item reveal">
+          <h3>The ring screen shows over the lock screen</h3>
+          <p>Without unlocking it. Dismissing an alarm at <span class="tnum">6:45</span> hands the phone back locked.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== Pricing ===================== -->
+  <section class="section pricing" id="pricing" aria-labelledby="pricing-h">
+    <div class="wrap">
+      <div class="section__head">
+        <span class="eyebrow">Pricing</span>
+        <h2 id="pricing-h">A paywall in front of "wake me at seven" is not a business model</h2>
+      </div>
+
+      <div class="free-note reveal">
+        <p>Alarms, video alarms, custom sounds, the world clock, the timer and the stopwatch are <b>free forever</b>. Premium adds shuffle playlists and removes the ads. That is all it does.</p>
+        <p class="free-note__tail">Nothing an alarm clock has to do is behind it. Nothing gets taken away.</p>
+      </div>
+
+      <div class="plans">
+        <div class="plan reveal">
+          <h3>Monthly</h3>
+          <p class="plan__price"><span class="plan__amount tnum">$1.99</span> <span class="plan__per">/ month</span></p>
+          <p class="plan__line">A month at a time. Cancel whenever.</p>
+        </div>
+
+        <div class="plan plan--best reveal">
+          <p class="plan__badge">Best value</p>
+          <h3>Yearly</h3>
+          <p class="plan__price"><span class="plan__amount tnum">$8.99</span> <span class="plan__per">/ year</span></p>
+          <p class="plan__line"><span class="plan__save">Save 62%</span> — works out at <b>$0.75</b> a month.</p>
+        </div>
+
+        <div class="plan reveal">
+          <h3>Lifetime</h3>
+          <p class="plan__price"><span class="plan__amount tnum">$14.99</span> <span class="plan__per">once</span></p>
+          <p class="plan__line">Under two years of the yearly plan, and then never again.</p>
+        </div>
+      </div>
+
+      <p class="fineprint">Monthly and yearly renew automatically until cancelled, from your App Store or Google Play account. Lifetime is a single payment. Prices are in USD and may vary by region.</p>
+      <p class="fineprint">This is the planned pricing. In-app purchasing goes live with the store listings.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__inner">
+      <div>
+        <p class="footer__brand">
+          <svg class="footer__mark" aria-hidden="true" focusable="false"><use href="#logo"/></svg>
+          Alarm++
+        </p>
+        <p class="footer__note">A Flutter app for Android and iOS.</p>
+      </div>
+      <ul class="footer__links">
+        <li><a href="#features">Features</a></li>
+        <li><a href="#pricing">Pricing</a></li>
+        <li><a href="privacy.html">Privacy policy</a></li>
+        <li><a href="mailto:CONTACT_EMAIL_HERE">CONTACT_EMAIL_HERE</a></li>
+      </ul>
+    </div>
+    <p class="footer__legal">&copy; 2026 Alarm++</p>
+  </div>
+</footer>
+
+<script>
+/* Reveal on scroll. Deliberately a position sweep rather than an
+   IntersectionObserver: anything whose top has passed the fold is shown, so an
+   instant jump to an anchor can never strand a section at opacity 0. */
+(function () {
+  if (!document.documentElement.classList.contains('js')) return;
+  var pending = [].slice.call(document.querySelectorAll('.reveal'));
+  if (!pending.length) return;
+  var queued = false;
+
+  function sweep() {
+    queued = false;
+    var edge = window.innerHeight * 0.94;
+    for (var i = pending.length - 1; i >= 0; i--) {
+      if (pending[i].getBoundingClientRect().top < edge) {
+        pending[i].classList.add('is-in');
+        pending.splice(i, 1);
+      }
+    }
+    if (!pending.length) {
+      window.removeEventListener('scroll', request);
+      window.removeEventListener('resize', request);
+    }
+  }
+  function request() {
+    if (!queued) { queued = true; requestAnimationFrame(sweep); }
+  }
+
+  window.addEventListener('scroll', request, { passive: true });
+  window.addEventListener('resize', request);
+  window.addEventListener('load', request);
+  sweep();
+})();
+</script>
+
+</body>
+</html>
