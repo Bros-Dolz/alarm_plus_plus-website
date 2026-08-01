@@ -1,0 +1,5 @@
+# Source recordings. These are the masters that the shipped assets are encoded
+# from — they are not served, and they are far too big to commit. alarm.gif
+# alone is 104 MB, over GitHub's 100 MB per-file limit, so committing it would
+# be rejected outright. Keep the originals somewhere outside the repo.
+assets/screenshots/*.gif

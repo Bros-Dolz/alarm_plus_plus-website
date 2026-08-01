@@ -526,15 +526,52 @@ h3 { font-size: clamp(1.3rem, 3.2vw, 1.625rem); }
   flex: 0 0 auto;
 }
 
-.shot picture { display: block; }
+.shot picture,
+.shot__media { display: block; }
 
-.shot img {
+.shot img,
+.shot__video {
   display: block;
   width: 100%;
   height: auto;
   border-radius: 35px;
   background: var(--surface);
 }
+
+/* The video carries the same 9:20 ratio as the screenshots, so the frame holds
+   its height before a single byte arrives and nothing below it jumps. */
+.shot__video { aspect-ratio: 1080 / 2400; object-fit: cover; }
+
+/* Pause control for the looping clip. Hidden until the script un-hides it:
+   with no JS there is nothing to click, so an inert button would be a lie. */
+.shot__toggle {
+  position: absolute;
+  right: 20px;
+  bottom: 20px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  appearance: none;
+  -webkit-appearance: none;
+  font: inherit;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--on-surface);
+  padding: 9px 13px 9px 11px;
+  border: 1px solid var(--outline-variant);
+  border-radius: 999px;
+  cursor: pointer;
+  /* Opaque first, so the control stays legible over the clip wherever
+     color-mix() is unsupported and the second declaration is dropped. */
+  background: var(--surface-container-high);
+  background: color-mix(in srgb, var(--surface-container-high) 92%, transparent);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.shot__toggle[hidden] { display: none; }
+.shot__toggle:hover { background: var(--surface-container-highest); }
+.shot__toggle-icon { width: 14px; height: 14px; fill: currentColor; flex: none; }
 
 /* --------------------------------------------------------------------------
    9. Built with care

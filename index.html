@@ -104,7 +104,10 @@
       </div>
       <p class="stores__note" id="stores-note">Not on the stores yet. These buttons go live with the listings.</p>
       </div>
-      <svg class="hero__watermark" viewBox="88 88 876 754" aria-hidden="true" focusable="false"><use href="#logo"/></svg>
+      <!-- viewBox starts at 0,0, not at the symbol's 88,88. <use> already maps the
+           symbol's own viewBox into a box at the origin, so repeating the offset
+           here would shift the window off the artwork and clip its top-left. -->
+      <svg class="hero__watermark" viewBox="0 0 876 754" aria-hidden="true" focusable="false"><use href="#logo"/></svg>
     </div>
   </section>
 
@@ -141,13 +144,36 @@
             <p class="feature__body">Picking a video to wake up to means picking the whole video.</p>
           </div>
           <div class="feature__visual">
-            <figure class="shot">
-              <picture>
-                <source srcset="assets/screenshots/ringing.webp" type="image/webp">
-                <img src="assets/screenshots/ringing.png" width="1080" height="2400"
-                     loading="lazy" decoding="async"
-                     alt="The Alarm++ ring screen: a large 4:10 PM readout above the alarm's label, with a Snooze 10 min button and Dismiss underneath. A video alarm plays full-screen behind this same layout.">
-              </picture>
+            <!-- A real recording of a video alarm ringing. Silent by design: the clip
+                 carries no audio track at all, so nothing can autoplay past a muted
+                 switch.
+
+                 The description sits on the wrapper as role="img", not on the <video>:
+                 ARIA in HTML allows no role on a video element, and aria-label on a
+                 non-interactive one is misuse. This way the slot reads to assistive
+                 tech exactly like the five stills beside it, while the pause button
+                 stays outside the img role and so stays exposed.
+
+                 No autoplay attribute and preload="none" on purpose. The script at
+                 the foot of the page starts the clip only once it scrolls into view,
+                 which keeps the 320 KB off the wire for anyone who never reaches this
+                 far and leaves reduced-motion visitors on the poster. With scripting
+                 off the poster is all there is — the same still frame this slot
+                 showed before. -->
+            <figure class="shot shot--video">
+              <div class="shot__media" role="img"
+                   aria-label="A video alarm ringing in Alarm++: a clip plays full-screen while 5:49 PM, the label Alarm, a Snooze 10 min button and Dismiss sit on top of it.">
+                <video class="shot__video" id="video-alarm"
+                       width="1080" height="2400"
+                       poster="assets/screenshots/video-alarm-poster.jpg"
+                       muted loop playsinline preload="none" aria-hidden="true">
+                  <source src="assets/screenshots/video-alarm.mp4" type="video/mp4">
+                </video>
+              </div>
+              <button type="button" class="shot__toggle" data-video="video-alarm" hidden>
+                <svg class="shot__toggle-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M6 4h4.5v16H6zM13.5 4H18v16h-4.5z"/></svg>
+                <span class="shot__toggle-text">Pause</span>
+              </button>
             </figure>
           </div>
         </article>
@@ -377,6 +403,71 @@
   window.addEventListener('scroll', request, { passive: true });
   window.addEventListener('resize', request);
   window.addEventListener('load', request);
+  sweep();
+})();
+
+/* The looping video-alarm clip: plays while it is on screen, stops when it is
+   not, and always yields to an explicit choice from the visitor. The button is
+   also the pause mechanism a loop running past five seconds owes the viewer. */
+(function () {
+  var btn = document.querySelector('.shot__toggle');
+  if (!btn) return;
+  var video = document.getElementById(btn.getAttribute('data-video'));
+  if (!video || typeof video.play !== 'function') return;
+  if (!video.canPlayType || !video.canPlayType('video/mp4')) return;
+
+  var label = btn.querySelector('.shot__toggle-text');
+  var icon = btn.querySelector('.shot__toggle-icon path');
+  /* Bars wide enough to still read as two at 13px, not one smudge. */
+  var PAUSE = 'M6 4h4.5v16H6zM13.5 4H18v16h-4.5z';
+  var PLAY = 'M7 4.5v15L19.5 12z';
+
+  var quiet = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  /* Reduced motion counts as a standing decision not to play, so the visibility
+     sweep below leaves it alone until the visitor presses the button. */
+  var decided = !!(quiet && quiet.matches);
+
+  function paint() {
+    var playing = !video.paused && !video.ended;
+    label.textContent = playing ? 'Pause' : 'Play';
+    icon.setAttribute('d', playing ? PAUSE : PLAY);
+    btn.setAttribute('aria-label', (playing ? 'Pause' : 'Play') + ' the video alarm clip');
+  }
+
+  function start() {
+    var p = video.play();
+    /* Chrome rejects this promise if it declines to play. Swallow it: the
+       'pause' handler has already left the button reading "Play". */
+    if (p && typeof p.catch === 'function') { p.catch(function () {}); }
+  }
+
+  btn.addEventListener('click', function () {
+    decided = true;
+    if (video.paused || video.ended) { start(); } else { video.pause(); }
+  });
+  /* Repaint from the media itself, so the button still tells the truth when the
+     browser stops the clip on its own — battery saver, a background tab, or a
+     refusal to start at all. */
+  video.addEventListener('play', paint);
+  video.addEventListener('pause', paint);
+
+  var queued = false;
+  function sweep() {
+    queued = false;
+    if (decided) return;
+    var r = video.getBoundingClientRect();
+    var onScreen = r.bottom > 0 && r.top < window.innerHeight;
+    if (onScreen && video.paused) { start(); }
+    else if (!onScreen && !video.paused) { video.pause(); }
+  }
+  function request() {
+    if (!queued) { queued = true; requestAnimationFrame(sweep); }
+  }
+  window.addEventListener('scroll', request, { passive: true });
+  window.addEventListener('resize', request);
+
+  btn.hidden = false;
+  paint();
   sweep();
 })();
 </script>
