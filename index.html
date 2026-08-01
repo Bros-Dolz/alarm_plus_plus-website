@@ -154,19 +154,21 @@
                  tech exactly like the five stills beside it, while the pause button
                  stays outside the img role and so stays exposed.
 
-                 No autoplay attribute and preload="none" on purpose. The script at
-                 the foot of the page starts the clip only once it scrolls into view,
-                 which keeps the 320 KB off the wire for anyone who never reaches this
-                 far and leaves reduced-motion visitors on the poster. With scripting
-                 off the poster is all there is — the same still frame this slot
-                 showed before. -->
+                 autoplay is on the element rather than driven by script, so the clip
+                 loops from page load even with scripting off. html-validate's
+                 no-autoplay rule is disabled for this one element below, not in the
+                 config: that rule guards WCAG 1.4.2 and 2.2.2, and both are met here
+                 — there is no audio to control, and the button underneath stops the
+                 loop. The script at the foot of the page adds that button and pauses
+                 the clip for anyone who has asked for reduced motion. -->
             <figure class="shot shot--video">
               <div class="shot__media" role="img"
                    aria-label="A video alarm ringing in Alarm++: a clip plays full-screen while 5:49 PM, the label Alarm, a Snooze 10 min button and Dismiss sit on top of it.">
+                <!-- [html-validate-disable-next no-autoplay -- silent clip, no audio track, with a pause control] -->
                 <video class="shot__video" id="video-alarm"
                        width="1080" height="2400"
                        poster="assets/screenshots/video-alarm-poster.jpg"
-                       muted loop playsinline preload="none" aria-hidden="true">
+                       autoplay muted loop playsinline preload="auto" aria-hidden="true">
                   <source src="assets/screenshots/video-alarm.mp4" type="video/mp4">
                 </video>
               </div>
@@ -406,9 +408,9 @@
   sweep();
 })();
 
-/* The looping video-alarm clip: plays while it is on screen, stops when it is
-   not, and always yields to an explicit choice from the visitor. The button is
-   also the pause mechanism a loop running past five seconds owes the viewer. */
+/* The looping video-alarm clip autoplays from the markup. This only adds the
+   pause control that a loop running past five seconds owes the viewer, and
+   stops the clip for anyone who has asked for reduced motion. */
 (function () {
   var btn = document.querySelector('.shot__toggle');
   if (!btn) return;
@@ -421,11 +423,6 @@
   /* Bars wide enough to still read as two at 13px, not one smudge. */
   var PAUSE = 'M6 4h4.5v16H6zM13.5 4H18v16h-4.5z';
   var PLAY = 'M7 4.5v15L19.5 12z';
-
-  var quiet = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-  /* Reduced motion counts as a standing decision not to play, so the visibility
-     sweep below leaves it alone until the visitor presses the button. */
-  var decided = !!(quiet && quiet.matches);
 
   function paint() {
     var playing = !video.paused && !video.ended;
@@ -442,33 +439,31 @@
   }
 
   btn.addEventListener('click', function () {
-    decided = true;
     if (video.paused || video.ended) { start(); } else { video.pause(); }
   });
   /* Repaint from the media itself, so the button still tells the truth when the
      browser stops the clip on its own — battery saver, a background tab, or a
-     refusal to start at all. */
+     refusal to autoplay at all. */
   video.addEventListener('play', paint);
   video.addEventListener('pause', paint);
 
-  var queued = false;
-  function sweep() {
-    queued = false;
-    if (decided) return;
-    var r = video.getBoundingClientRect();
-    var onScreen = r.bottom > 0 && r.top < window.innerHeight;
-    if (onScreen && video.paused) { start(); }
-    else if (!onScreen && !video.paused) { video.pause(); }
+  /* Reduced motion: hold the poster. This runs at the foot of the document,
+     before the clip has buffered enough to show a frame, so nothing moves
+     first. The button is still there to start it deliberately. */
+  var quiet = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
+  if (quiet && quiet.matches) {
+    video.autoplay = false;
+    video.pause();
+  } else {
+    /* Chrome honours the autoplay attribute only once the element is on
+       screen; Firefox and Safari start straight away. Asking explicitly makes
+       the clip already be running by the time the visitor scrolls down to it,
+       in every browser. */
+    start();
   }
-  function request() {
-    if (!queued) { queued = true; requestAnimationFrame(sweep); }
-  }
-  window.addEventListener('scroll', request, { passive: true });
-  window.addEventListener('resize', request);
 
   btn.hidden = false;
   paint();
-  sweep();
 })();
 </script>
 
