@@ -81,10 +81,11 @@
       <p class="hero__line">An alarm clock built around <b>what wakes you</b> — one of five tones, a video from your own library, or a shuffle that plays something different every morning.</p>
 
       <div class="stores">
-        <!-- Placeholders. Buttons rather than links on purpose: there is nowhere
-             to point yet, and an href="#" would jump the page to the top and reset
-             the tab position. Swap each for an <a href="…"> carrying the official
-             App Store / Google Play badge once there are listings. -->
+        <!-- Google Play is live and is a real <a href>. The App Store button stays
+             a <button aria-disabled> placeholder on purpose: there is nowhere to
+             point yet, and an href="#" would jump the page to the top and reset the
+             tab position. Swap it for an <a href="…"> carrying the official badge
+             once the iOS listing exists. -->
         <button type="button" class="store" aria-disabled="true" aria-describedby="stores-note">
           <svg class="store__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a1 1 0 0 1 1 1v9.59l3.3-3.3a1 1 0 1 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V4a1 1 0 0 1 1-1Zm-7 14a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z"/></svg>
           <span class="store__text">
@@ -93,16 +94,15 @@
           </span>
           <span class="store__soon">Soon</span>
         </button>
-        <button type="button" class="store" aria-disabled="true" aria-describedby="stores-note">
+        <a class="store" href="https://play.google.com/store/apps/details?id=com.alarmplusplus.app" rel="noopener">
           <svg class="store__glyph" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M12 3a1 1 0 0 1 1 1v9.59l3.3-3.3a1 1 0 1 1 1.4 1.42l-5 5a1 1 0 0 1-1.4 0l-5-5a1 1 0 1 1 1.4-1.42l3.3 3.3V4a1 1 0 0 1 1-1Zm-7 14a1 1 0 0 1 1 1v1h12v-1a1 1 0 1 1 2 0v2a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-2a1 1 0 0 1 1-1Z"/></svg>
           <span class="store__text">
             <span class="store__kicker">Get it on</span>
             <span class="store__name">Google Play</span>
           </span>
-          <span class="store__soon">Soon</span>
-        </button>
+        </a>
       </div>
-      <p class="stores__note" id="stores-note">Not on the stores yet. These buttons go live with the listings.</p>
+      <p class="stores__note" id="stores-note">Out now on Google Play. Not on the App Store yet — that button goes live with the iOS listing.</p>
       </div>
       <!-- viewBox starts at 0,0, not at the symbol's 88,88. <use> already maps the
            symbol's own viewBox into a box at the origin, so repeating the offset

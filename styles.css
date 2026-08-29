@@ -365,14 +365,15 @@ h3 { font-size: clamp(1.3rem, 3.2vw, 1.625rem); }
   background: var(--surface-container-high);
   color: var(--on-surface);
   text-decoration: none;
-  cursor: not-allowed;
-  /* Button resets — these are <button aria-disabled> placeholders, not links. */
+  cursor: pointer;
+  /* Button resets — the App Store slot is still a <button aria-disabled>. */
   appearance: none;
   -webkit-appearance: none;
   font: inherit;
   text-align: left;
 }
 .store:hover { background: var(--surface-container-highest); }
+.store[aria-disabled="true"] { cursor: not-allowed; }
 .store__glyph { width: 26px; height: 26px; flex: 0 0 auto; fill: currentColor; }
 .store__text { display: flex; flex-direction: column; line-height: 1.2; }
 .store__kicker { font-size: 0.6875rem; color: var(--on-surface-variant); letter-spacing: 0.3px; }
