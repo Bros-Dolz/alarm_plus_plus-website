@@ -621,7 +621,7 @@ h3 { font-size: clamp(1.3rem, 3.2vw, 1.625rem); }
   gap: 16px;
   align-items: start;
 }
-@media (min-width: 760px) { .plans { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 760px) { .plans { grid-template-columns: repeat(2, 1fr); } }
 
 .plan {
   position: relative;
