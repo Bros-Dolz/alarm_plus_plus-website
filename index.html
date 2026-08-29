@@ -159,8 +159,8 @@
                  no-autoplay rule is disabled for this one element below, not in the
                  config: that rule guards WCAG 1.4.2 and 2.2.2, and both are met here
                  — there is no audio to control, and the button underneath stops the
-                 loop. The script at the foot of the page adds that button and pauses
-                 the clip for anyone who has asked for reduced motion. -->
+                 loop. The script at the foot of the page adds that button and keeps
+                 asking the clip to play until it does. -->
             <figure class="shot shot--video">
               <div class="shot__media" role="img"
                    aria-label="A video alarm ringing in Alarm++: a clip plays full-screen while 5:49 PM, the label Alarm, a Snooze 10 min button and Dismiss sit on top of it.">
@@ -408,9 +408,9 @@
   sweep();
 })();
 
-/* The looping video-alarm clip autoplays from the markup. This only adds the
-   pause control that a loop running past five seconds owes the viewer, and
-   stops the clip for anyone who has asked for reduced motion. */
+/* The looping video-alarm clip autoplays from the markup. This adds the pause
+   control that a loop running past five seconds owes the viewer, and retries
+   play() so the clip is running from page load in every browser. */
 (function () {
   var btn = document.querySelector('.shot__toggle');
   if (!btn) return;
@@ -438,8 +438,13 @@
     if (p && typeof p.catch === 'function') { p.catch(function () {}); }
   }
 
+  /* Set once the visitor pauses deliberately, so the retries below never
+     restart a clip they asked to stop. */
+  var userPaused = false;
+
   btn.addEventListener('click', function () {
-    if (video.paused || video.ended) { start(); } else { video.pause(); }
+    if (video.paused || video.ended) { userPaused = false; start(); }
+    else { userPaused = true; video.pause(); }
   });
   /* Repaint from the media itself, so the button still tells the truth when the
      browser stops the clip on its own — battery saver, a background tab, or a
@@ -447,20 +452,26 @@
   video.addEventListener('play', paint);
   video.addEventListener('pause', paint);
 
-  /* Reduced motion: hold the poster. This runs at the foot of the document,
-     before the clip has buffered enough to show a frame, so nothing moves
-     first. The button is still there to start it deliberately. */
-  var quiet = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)');
-  if (quiet && quiet.matches) {
-    video.autoplay = false;
-    video.pause();
-  } else {
-    /* Chrome honours the autoplay attribute only once the element is on
-       screen; Firefox and Safari start straight away. Asking explicitly makes
-       the clip already be running by the time the visitor scrolls down to it,
-       in every browser. */
-    start();
+  /* Start on load, unconditionally — including under prefers-reduced-motion,
+     which used to hold the poster here. WCAG 2.2.2 is still met: the button
+     below stops the loop for anyone who wants it stopped.
+
+     Chrome honours the autoplay attribute only once the element is on screen;
+     Firefox and Safari start straight away. Asking explicitly makes the clip
+     already be running by the time the visitor scrolls down to it, in every
+     browser. */
+  start();
+
+  /* A play() issued before the file has buffered can be dropped on the floor.
+     Ask again as soon as there is something to show, and once more on full
+     load, so a slow connection still ends up playing rather than parked on
+     the poster. Both are no-ops once it is already running. */
+  function startIfPaused() {
+    if (!userPaused && (video.paused || video.ended)) { start(); }
   }
+  video.addEventListener('canplay', startIfPaused);
+  video.addEventListener('loadeddata', startIfPaused);
+  window.addEventListener('load', startIfPaused);
 
   btn.hidden = false;
   paint();
